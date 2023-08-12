@@ -1,0 +1,7 @@
+{
+    "DefaultLanguage": "English",
+    "DefaultArchitecture": "64bit",
+    "ClientFile": "Client.json",
+    "RepositoryFile": "Repositories.json",
+    "ServerFile": "Servers.json"
+}

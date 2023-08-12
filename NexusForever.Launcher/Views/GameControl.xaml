@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="NexusForever.Launcher.Views.GameControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:vm="clr-namespace:NexusForever.Launcher.ViewModels"
+
+             xmlns:dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+             dialog:DialogParticipation.Register="{Binding}"
+             
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance vm:GameControlViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid Margin="5">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0"
+                    Orientation="Vertical">
+
+            <GroupBox Header="Client Information">
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"></ColumnDefinition>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"
+                               Margin="0 0 5 0"
+                               Text="Location:"></TextBlock>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding ClientLocation}"></TextBlock>
+
+                </Grid>
+
+            </GroupBox>
+
+            <GroupBox Header="Launch Settings">
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"
+                               Margin="0 0 5 0"
+                               Text="Selected Language:"></TextBlock>
+                    <ComboBox  Grid.Column="1"
+                               ItemsSource="{Binding AvailableLanguages}"
+                               SelectedItem="{Binding SelectedLanguage}"
+                               DisplayMemberPath="Language"></ComboBox>
+
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"
+                               Margin="0 0 5 0"
+                               Text="Selected Architecture:"></TextBlock>
+                    <ComboBox  Grid.Row="1"
+                               Grid.Column="1"
+                               ItemsSource="{Binding AvailableArchitectures}"
+                               SelectedItem="{Binding SelectedArchitecture}"
+                               DisplayMemberPath="Architecture"></ComboBox>
+
+                </Grid>
+
+            </GroupBox>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
+
+            <Button Command="{Binding OnBrowseClient}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="TextBoxSearchOutline"></iconPacks:PackIconMaterial>
+                    <TextBlock Text="Browse Client..."></TextBlock>
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+
+    </Grid>
+
+</UserControl>

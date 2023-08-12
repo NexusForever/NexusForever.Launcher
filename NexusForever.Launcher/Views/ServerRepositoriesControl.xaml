@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="NexusForever.Launcher.Views.ServerRepositoriesControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:vm="clr-namespace:NexusForever.Launcher.ViewModels"
+             
+             xmlns:dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+             dialog:DialogParticipation.Register="{Binding}"
+             
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance vm:ServerRepositoriesControlViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <Grid Margin="5">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <ListBox Grid.Row="0"
+                 ItemsSource="{Binding ServerRepositories, Mode=TwoWay}"
+                 SelectedItem="{Binding SelectedServerRepository, Mode=TwoWay}"
+                 ScrollViewer.VerticalScrollBarVisibility="Visible">
+            
+            <ListBox.ItemTemplate>
+
+                <DataTemplate>
+
+                    <StackPanel Orientation="Vertical" Margin="5">
+                        <TextBlock Text="{Binding Name}" FontWeight="Heavy"></TextBlock>
+                        <TextBlock Text="{Binding Description}" FontWeight="Medium"></TextBlock>
+                        <TextBlock Text="{Binding Url}" FontWeight="Thin"></TextBlock>
+                    </StackPanel>
+
+                </DataTemplate>
+                
+            </ListBox.ItemTemplate>
+        
+        </ListBox>
+
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+
+            <Button Command="{Binding OnAddRepository}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="DatabasePlusOutline"></iconPacks:PackIconMaterial>
+                    <TextBlock Text="Add Repository"></TextBlock>
+                </StackPanel>
+            </Button>
+
+            <Button Command="{Binding OnRemoveRepository}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="DatabaseRemoveOutline"></iconPacks:PackIconMaterial>
+                    <TextBlock Text="Remove Repository"></TextBlock>
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+        
+    </Grid>
+    
+</UserControl>
