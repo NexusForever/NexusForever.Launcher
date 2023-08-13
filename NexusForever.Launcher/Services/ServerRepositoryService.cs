@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 using NexusForever.Launcher.Models;
 using NexusForever.Launcher.Repositories;
@@ -73,9 +76,18 @@ public class ServerRepositoryService : IServerRepositoryService
 
     private async Task<ServerRepositoryModel> CreateRepository(string url)
     {
-        using HttpClient client = _httpClientFactory.CreateClient();
+        ServerRepositoryModel serverRepository;
+        if (new Uri(url).Scheme == Uri.UriSchemeFile)
+        {
+            await using FileStream fileStream = File.OpenRead($"{url.TrimEnd('/')}/Servers.json");
+            serverRepository = await JsonSerializer.DeserializeAsync<ServerRepositoryModel>(fileStream);
+        }
+        else
+        {
+            using HttpClient client = _httpClientFactory.CreateClient();
+            serverRepository = await client.GetFromJsonAsync<ServerRepositoryModel>($"{url.TrimEnd('/')}/Servers.json");
+        }
 
-        ServerRepositoryModel serverRepository = await client.GetFromJsonAsync<ServerRepositoryModel>($"{url.TrimEnd('/')}/Servers.json");
         serverRepository.Url = url;
         return serverRepository;
     }
