@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -93,7 +92,7 @@ public class ServerListControlViewModel : ObservableObject
             You are about to visit a community hosted website.
             Do you wish to continue?
 
-            Discord: {server.Website}
+            Website: {server.Website}
             """);
     }
 
@@ -158,21 +157,7 @@ public class ServerListControlViewModel : ObservableObject
         }
 
         if (SelectedServer.Custom)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine($"""
-                {SelectedServer.Name} has been marked as a custom server, it might require additional client setup before playing.
-                If you encounter any issues contact the community administration for further information.
-                """);
-
-            sb.AppendLine();
-            if (SelectedServer.Discord != null)
-                sb.AppendLine($"Discord: {SelectedServer.Discord}");
-            if (SelectedServer.Website != null)
-                sb.AppendLine($"Website: {SelectedServer.Website}");
-
-            await _dialogCoordinator.ShowMessageAsync(this, "Launch Server", sb.ToString());
-        }
+            await _dialogCoordinator.ShowMessageAsync(this, "Launch Server", SelectedServer.CustomMessage);
 
         _clientLauncherService.Launch(GameControlViewModel.ClientLocation, GameControlViewModel.SelectedLanguage, GameControlViewModel.SelectedArchitecture, SelectedServer);
     }

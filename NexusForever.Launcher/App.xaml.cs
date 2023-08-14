@@ -62,6 +62,12 @@ public partial class App : Application
         services.AddTransient<IServerRepositoryRepository, ServerRepositoryRepository>();
         services.AddTransient<IClientRepository, ClientRepository>();
         services.AddTransient<IServerRepository, ServerRepository>();
+
+        services.AddTransient<IServerRepositorySourceFactory, ServerRepositorySourceFactory>();
+        services.AddTransient<HttpServerRepositorySource>();
+        services.AddTransient<FileServerRepositorySource>();
+
+        services.AddTransient<ICustomServerMessageFormatter, CustomServerMessageFormatter>();
     }
 
     protected override void OnStartup(StartupEventArgs e)

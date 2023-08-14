@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NexusForever.Launcher.Models;
 using NexusForever.Launcher.Repositories;
@@ -16,15 +12,20 @@ public class ServerRepositoryService : IServerRepositoryService
 
     #region Dependency Injection
 
-    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IServerRepositorySourceFactory _serverRepositorySourceFactory;
     private readonly IServerRepositoryRepository _serverRepositoryRepository;
 
+    private readonly ICustomServerMessageFormatter _customServerMessageFormatter;
+
     public ServerRepositoryService(
-        IHttpClientFactory httpClientFactory,
-        IServerRepositoryRepository serverRepositoryRepository)
+        IServerRepositorySourceFactory serverRepositorySourceFactory,
+        IServerRepositoryRepository serverRepositoryRepository,
+        ICustomServerMessageFormatter customServerMessageFormatter)
     {
-        _httpClientFactory          = httpClientFactory;
-        _serverRepositoryRepository = serverRepositoryRepository;
+        _serverRepositorySourceFactory = serverRepositorySourceFactory;
+        _serverRepositoryRepository    = serverRepositoryRepository;
+
+        _customServerMessageFormatter  = customServerMessageFormatter;
     }
 
     #endregion
@@ -76,19 +77,19 @@ public class ServerRepositoryService : IServerRepositoryService
 
     private async Task<ServerRepositoryModel> CreateRepository(string url)
     {
-        ServerRepositoryModel serverRepository;
-        if (new Uri(url).Scheme == Uri.UriSchemeFile)
-        {
-            await using FileStream fileStream = File.OpenRead($"{url.TrimEnd('/')}/Servers.json");
-            serverRepository = await JsonSerializer.DeserializeAsync<ServerRepositoryModel>(fileStream);
-        }
-        else
-        {
-            using HttpClient client = _httpClientFactory.CreateClient();
-            serverRepository = await client.GetFromJsonAsync<ServerRepositoryModel>($"{url.TrimEnd('/')}/Servers.json");
-        }
+        IServerRepositorySource source = _serverRepositorySourceFactory.Create(url);
 
-        serverRepository.Url = url;
+        ServerRepositoryModel serverRepository = await source.GetRepository(url);
+        EnrichRepository(url, serverRepository);
+
         return serverRepository;
+    }
+
+    private void EnrichRepository(string url, ServerRepositoryModel serverRepository)
+    {
+        serverRepository.Url = url;
+
+        foreach (ServerModel server in serverRepository.Servers.Where(s => s.Custom))
+            _customServerMessageFormatter.Format(serverRepository, server);
     }
 }
