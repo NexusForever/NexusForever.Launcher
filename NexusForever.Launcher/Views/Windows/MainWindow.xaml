@@ -14,7 +14,7 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=True}"  
                  
-        Title="NexusForever Launcher" Height="450" Width="800"
+        Title="{Binding Title}" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
 
     <b:Interaction.Triggers>

@@ -68,6 +68,8 @@ public partial class App : Application
         services.AddTransient<FileServerRepositorySource>();
 
         services.AddTransient<ICustomServerMessageFormatter, CustomServerMessageFormatter>();
+
+        services.AddTransient<IUpdateService, UpdateService>();
     }
 
     protected override void OnStartup(StartupEventArgs e)

@@ -2,6 +2,8 @@
 
 public class LauncherConfiguration
 {
+    public string UpdateUrl { get; set; }
+    public bool CheckForUpdates { get; set; }
     public string DefaultLanguage { get; set; }
     public string DefaultArchitecture { get; set; }
     public string ClientFile { get; set; }

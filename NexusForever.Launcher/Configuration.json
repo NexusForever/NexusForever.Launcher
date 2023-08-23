@@ -1,4 +1,6 @@
 {
+    "UpdateUrl": "https://raw.githubusercontent.com/NexusForever/NexusForever.Launcher.Repository/master/Update.json",
+    "CheckForUpdates": true,
     "DefaultLanguage": "English",
     "DefaultArchitecture": "64bit",
     "ClientFile": "Client.json",
